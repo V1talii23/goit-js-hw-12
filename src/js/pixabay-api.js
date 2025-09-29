@@ -17,6 +17,8 @@ async function getImagesByQuery(query, page = 1) {
       page,
     },
   });
+  console.log(response.data);
+  console.log(page);
 
   return response.data;
 }

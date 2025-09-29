@@ -9,6 +9,7 @@ import {
   showLoaderMoreButton,
   hideLoaderMoreButton,
   loadMoreBtn,
+  checkIfReachedTheEnd,
 } from './js/render-functions';
 
 let page = 1;
@@ -28,8 +29,6 @@ async function formSubmit(e) {
   query = String(e.target.elements['search-text'].value.toLowerCase().trim());
 
   if (!query) {
-    hideLoaderMoreButton();
-
     return iziToast.error({
       icon: '',
       position: 'topRight',
@@ -62,20 +61,9 @@ async function formSubmit(e) {
     }
 
     createGallery(res.hits);
-    if (res.hits.length * page > res.totalHits) {
-      hideLoaderMoreButton();
-      return iziToast.info({
-        message: "We're sorry, but you've reached the end of search results.",
-        icon: '',
-        position: 'topRight',
-        timeout: 5000,
-        progressBar: false,
-        close: false,
-        messageColor: 'white',
-      });
+    if (!checkIfReachedTheEnd(res, page, 15)) {
+      showLoaderMoreButton();
     }
-
-    showLoaderMoreButton();
 
     e.target.reset();
   } catch (error) {
@@ -119,21 +107,9 @@ async function handlerLoadMore(e) {
         behavior: 'smooth',
       });
     }
-
-    if (res.hits.length * page > res.totalHits) {
-      hideLoaderMoreButton();
-      return iziToast.info({
-        message: "We're sorry, but you've reached the end of search results.",
-        icon: '',
-        position: 'topRight',
-        timeout: 5000,
-        progressBar: false,
-        close: false,
-        messageColor: 'white',
-      });
+    if (!checkIfReachedTheEnd(res, page, 15)) {
+      showLoaderMoreButton();
     }
-
-    showLoaderMoreButton();
   } catch (error) {
     page = 1;
     console.error(error.message);

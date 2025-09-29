@@ -1,5 +1,6 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import iziToast from 'izitoast';
 
 const ul = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
@@ -67,6 +68,24 @@ function hideLoaderMoreButton() {
   }
 }
 
+function checkIfReachedTheEnd(res, page, perPage) {
+  const alreadyLoaded = page * perPage;
+
+  if (alreadyLoaded >= res.totalHits) {
+    hideLoaderMoreButton();
+    iziToast.info({
+      message: "We're sorry, but you've reached the end of search results.",
+      icon: '',
+      position: 'topRight',
+      timeout: 5000,
+      progressBar: false,
+      close: false,
+      messageColor: 'white',
+    });
+    return true;
+  }
+}
+
 export {
   createGallery,
   clearGallery,
@@ -75,4 +94,5 @@ export {
   showLoaderMoreButton,
   hideLoaderMoreButton,
   loadMoreBtn,
+  checkIfReachedTheEnd,
 };
