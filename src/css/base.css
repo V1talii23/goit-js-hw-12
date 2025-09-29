@@ -17,6 +17,7 @@
 }
 
 body {
+  padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   min-width: 100vw;
